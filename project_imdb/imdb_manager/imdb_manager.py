@@ -1,6 +1,6 @@
 import pymysql
 from project_imdb.config import host, user, password, db
-from project_imdb.imdb_manager.imdb_queries import add_actor_query, get_actor_id_query, add_person_query
+from project_imdb.imdb_manager.imdb_queries import add_person_query, get_person_id_query
 
 
 class Person:
@@ -33,37 +33,39 @@ class ImdbManager:
         print(add_person_query % (table, person.first_name, person.last_name, person.nationality))
         cursor.execute(add_person_query % (table, person.first_name, person.last_name, person.nationality))
         self.conn.commit()
+        return self.get_person_id(person, table)
 
     def addActor(self, person):
         """
-        adds actor to actor table given first actor object
-        :param actor: actor object
+        adds person to actor table given person object
+        :param person: person object
         :return: id in actor table
         """
-        self.addPerson(person, 'actor')
+        return self.addPerson(person, 'actor')
 
     def addDirector(self, person):
         """
-        adds actor to actor table given first actor object
-        :param actor: actor object
-        :return: id in actor table
+        adds person to director table given person object
+        :param person: person object
+        :return: id in director table
         """
-        self.addPerson(person, 'director')
+        return self.addPerson(person, 'director')
 
-    def getActorId(self, actor):
+    def get_person_id(self, person, table):
         """
-        gets actor id actor object
-        :param actor: actor object
+        gets person id in given table and given person object
+        :param person: person object
+        :param table: target table
         :return:
         """
-        # create cursor
         cursor = self.conn.cursor()
-        cursor.execute(get_actor_id_query % (actor.first_name, actor.last_name))
+        cursor.execute(get_person_id_query % (table, person.first_name, person.last_name))
         return cursor.fetchall()[0][0]
 
 
 if __name__ == "__main__":
     imdb_manager = ImdbManager(host, user, password, db)
     person = Person(first_name='Jerzy', last_name='Stuhr', nationality='PL')
-    imdb_manager.addActor(person)
+    print(imdb_manager.addActor(person))
+    print(imdb_manager.addDirector(person))
     # print(imdb_manager.getActorId(actor))
