@@ -2,25 +2,7 @@ import pymysql
 from project_imdb.config import host, user, password, db
 from project_imdb.imdb_manager.imdb_queries import add_person_query, get_person_id_query, add_genre_query, \
     get_genre_id_query, add_film_row_query, add_actor_in_film_row, add_film_has_genre_row
-from project_imdb.imdb_manager.film import Film
-
-
-class Person:
-    """
-    Holds data about person
-    """
-    def __init__(self, first_name, last_name, nationality):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.nationality = nationality
-
-
-class Genre:
-    """
-    Holds data about genre
-    """
-    def __init__(self, name):
-        self.name = name
+from project_imdb.imdb_manager.film import Film, Person, Genre
 
 
 class ImdbManager:
@@ -74,7 +56,6 @@ class ImdbManager:
             return cursor.fetchall()[0][0]
         except IndexError:
             return None
-
 
     def addGenre(self, genre):
         """
@@ -172,22 +153,6 @@ class ImdbManager:
 
 if __name__ == "__main__":
     imdb_manager = ImdbManager(host, user, password, db)
-    # genre = Genre('Action')
-    # print(imdb_manager.addGenre(genre))
-    # # person = Person(first_name='Jerzy', last_name='Stuhr', nationality='PL')
-    # print(imdb_manager.addActor(person))
-    # print(imdb_manager.addDirector(person))
-    # print(imdb_manager.getActorId(actor)
-    # INSERT
-    # INTO
-    # film(title, relYear, durationMins, rating, voters, ranking)
-    # VALUES
-    # ('et', '83', '200', '9.9', '200000', '2');
-    # et_film = Film(title='et', rel_year='83', duration=200, rating=9.9, ranking=2)
-    # print(imdb_manager._addFilmRow(et_film))
-    # imdb_manager._addFilmHasGenreRow(3, 2)
-    # person = Person('Jan', 'P', 'PL')
-    # print(imdb_manager._getPersonId(person, 'actor'))
 
     actors = [Person('Sylvester', 'Stallone', 'US'), Person('Arnold', 'Schwarzeneger', 'AT')]
     director = Person('Steven', 'Spielberg', 'US')
