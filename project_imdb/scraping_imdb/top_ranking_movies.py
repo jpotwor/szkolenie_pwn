@@ -51,7 +51,16 @@ for movie_href in movie_hrefs:
                     actor = Person(first_name, last_name)
                     actors.append(actor)
 
-    print("title: '%s'; year: '%s; director: %s'; actors: %s" % (title, year, director, actors))
+    # genres
+    see_more_elems = film_detail_soup.findAll('div', {'class': 'see-more inline canwrap'})
+    for see_more_elem in see_more_elems:
+        if 'genres' in see_more_elem.find('h4').text.lower():
+            genres = []
+            for a in see_more_elem.findAll('a'):
+                genre = Genre(a.text.strip())
+                genres.append(genre)
+
+    print("title: '%s'; genres: %s" % (title, ', '.join([el.name for el in genres])))
 
 
 
