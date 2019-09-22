@@ -48,6 +48,7 @@ class Film:
         self.ranking = ranking
         self.orig_title = orig_title
         self.genres = genres
+        self.duration = duration
 
 
 if __name__ == "__main__":

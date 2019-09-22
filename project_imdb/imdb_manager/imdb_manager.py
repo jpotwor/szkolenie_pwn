@@ -1,7 +1,7 @@
 import pymysql
 from project_imdb.config import host, user, password, db
 from project_imdb.imdb_manager.imdb_queries import add_person_query, get_person_id_query, add_genre_query, \
-    get_genre_id_query
+    get_genre_id_query, add_film_row_query
 from project_imdb.imdb_manager.film import Film
 
 
@@ -100,7 +100,15 @@ class ImdbManager:
         pass
 
     def _addFilmRow(self, film):
-        pass
+        """
+        add row with title, rel_year, durarion, rating, voters, ranking,
+        orig_title
+        :param film: object with film
+        :return:
+        """
+        cursor = self.conn.cursor()
+        cursor.execute(add_film_row_query % (film.title, film.rel_year, film.duration, film.rating, film.voters, film.ranking))
+        self.conn.commit()
 
     def _addActorInFilm(self):
         pass
@@ -109,14 +117,21 @@ class ImdbManager:
         pass
 
 
-
-
 if __name__ == "__main__":
     imdb_manager = ImdbManager(host, user, password, db)
-    genre = Genre('Action')
-    print(imdb_manager.addGenre(genre))
-    # person = Person(first_name='Jerzy', last_name='Stuhr', nationality='PL')
+    # genre = Genre('Action')
+    # print(imdb_manager.addGenre(genre))
+    # # person = Person(first_name='Jerzy', last_name='Stuhr', nationality='PL')
     # print(imdb_manager.addActor(person))
     # print(imdb_manager.addDirector(person))
     # print(imdb_manager.getActorId(actor))
+
+    # INSERT
+    # INTO
+    # film(title, relYear, durationMins, rating, voters, ranking)
+    # VALUES
+    # ('et', '83', '200', '9.9', '200000', '2');
+
+    et_film = Film(title='et', rel_year='83', duration=200, rating=9.9, ranking=2)
+    imdb_manager._addFilmRow(et_film)
 

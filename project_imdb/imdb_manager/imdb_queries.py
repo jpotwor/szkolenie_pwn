@@ -13,3 +13,11 @@ INSERT INTO genre (genreName) VALUES ('%s');
 get_genre_id_query = """
 SELECT ID FROM genre where genreName = '%s';
 """
+
+# add row with title, rel_year, durarion, rating, voters, ranking,
+#         orig_title
+
+add_film_row_query = """
+INSERT INTO film (title, relYear, durationMins, rating, voters, ranking) VALUES
+('%s', '%s', '%s', '%s', '%s', '%s');
+"""
