@@ -41,7 +41,6 @@ class ImdbManager:
         :return:
         """
         cursor = self.conn.cursor()
-        print(add_person_query % (table, person.first_name, person.last_name, person.nationality))
         cursor.execute(add_person_query % (table, person.first_name, person.last_name, person.nationality))
         self.conn.commit()
         return self._getPersonId(person, table)
@@ -144,6 +143,7 @@ class ImdbManager:
         """
         cursor = self.conn.cursor()
         cursor.execute(add_film_row_query % (film.title, film.rel_year, film.duration, film.rating, film.voters, film.ranking, director_id))
+
         self.conn.commit()
         return cursor.lastrowid
 
@@ -189,10 +189,17 @@ if __name__ == "__main__":
     # person = Person('Jan', 'P', 'PL')
     # print(imdb_manager._getPersonId(person, 'actor'))
 
-    actors = [Person('Sylvester', 'Stallone', 'US'), ('Arnold', 'Schwarzeneger', 'AT')]
+    actors = [Person('Sylvester', 'Stallone', 'US'), Person('Arnold', 'Schwarzeneger', 'AT')]
     director = Person('Steven', 'Spielberg', 'US')
     genres = [Genre('SciFy'), Genre('Family')]
     film = Film(title='et', rel_year=1983, actors=actors, genres=genres, director=director)
+    imdb_manager.addFilm(film)
+
+
+    actors = [Person('Sylvester', 'Stallone', 'US')]
+    director = Person('Rezyser', 'Znany', 'US')
+    genres = [Genre('Action')]
+    film = Film(title='rambo', rel_year=1983, actors=actors, genres=genres, director=director)
     imdb_manager.addFilm(film)
 
 

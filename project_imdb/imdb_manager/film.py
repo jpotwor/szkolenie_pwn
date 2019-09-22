@@ -53,7 +53,7 @@ class Film:
         self.duration = zero_if_none(duration)
         self.director = director
         self.actors = empty_list_if_none(actors)
-        self.rating = rating
+        self.rating = zero_if_none(rating)
         self.voters = zero_if_none(voters)
         self.ranking = zero_if_none(ranking)
         self.orig_title = orig_title
