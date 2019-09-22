@@ -21,3 +21,11 @@ add_film_row_query = """
 INSERT INTO film (title, relYear, durationMins, rating, voters, ranking) VALUES
 ('%s', '%s', '%s', '%s', '%s', '%s');
 """
+
+add_actor_in_film_row = """
+INSERT INTO actor_in_film (filmID, actorID) VALUES (%s, %s);
+"""
+
+add_film_has_genre_row = """
+INSERT INTO film_has_genre (filmID, genreID) VALUES (%s, %s);
+"""

@@ -1,7 +1,7 @@
 import pymysql
 from project_imdb.config import host, user, password, db
 from project_imdb.imdb_manager.imdb_queries import add_person_query, get_person_id_query, add_genre_query, \
-    get_genre_id_query, add_film_row_query
+    get_genre_id_query, add_film_row_query, add_actor_in_film_row, add_film_has_genre_row
 from project_imdb.imdb_manager.film import Film
 
 
@@ -111,11 +111,27 @@ class ImdbManager:
         cursor.execute(add_film_row_query % (film.title, film.rel_year, film.duration, film.rating, film.voters, film.ranking))
         self.conn.commit()
 
-    def _addActorInFilm(self):
-        pass
+    def _addActorInFilm(self, film_id, actor_id):
+        """
+        adds row in actor_in_film table
+        :param film_id: film_id
+        :param actor_id: actor_id
+        :return: None
+        """
+        cursor = self.conn.cursor()
+        cursor.execute(add_actor_in_film_row % (film_id, actor_id))
+        self.conn.commit()
 
-    def _addGenreInFilm(self):
-        pass
+    def _addFilmHasGenre(self, film_id, genre_id):
+        """
+        adds row in film_has_genre table
+        :param film_id: film_id
+        :param genre_id: genre_id
+        :return: None
+        """
+        cursor = self.conn.cursor()
+        cursor.execute(add_film_has_genre_row % (film_id, genre_id))
+        self.conn.commit()
 
 
 if __name__ == "__main__":
@@ -133,6 +149,8 @@ if __name__ == "__main__":
     # VALUES
     # ('et', '83', '200', '9.9', '200000', '2');
 
-    et_film = Film(title='et', rel_year='83', duration=200, rating=9.9, ranking=2)
-    imdb_manager._addFilmRow(et_film)
+    # et_film = Film(title='et', rel_year='83', duration=200, rating=9.9, ranking=2)
+    # imdb_manager._addFilmRow(et_film)
+
+    imdb_manager._addFilmHasGenre(3, 2)
 
