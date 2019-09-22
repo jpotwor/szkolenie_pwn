@@ -177,18 +177,22 @@ if __name__ == "__main__":
     # # person = Person(first_name='Jerzy', last_name='Stuhr', nationality='PL')
     # print(imdb_manager.addActor(person))
     # print(imdb_manager.addDirector(person))
-    # print(imdb_manager.getActorId(actor))
-
+    # print(imdb_manager.getActorId(actor)
     # INSERT
     # INTO
     # film(title, relYear, durationMins, rating, voters, ranking)
     # VALUES
     # ('et', '83', '200', '9.9', '200000', '2');
-
-    et_film = Film(title='et', rel_year='83', duration=200, rating=9.9, ranking=2)
-    print(imdb_manager._addFilmRow(et_film))
-
+    # et_film = Film(title='et', rel_year='83', duration=200, rating=9.9, ranking=2)
+    # print(imdb_manager._addFilmRow(et_film))
     # imdb_manager._addFilmHasGenreRow(3, 2)
     # person = Person('Jan', 'P', 'PL')
     # print(imdb_manager._getPersonId(person, 'actor'))
+
+    actors = [Person('Sylvester', 'Stallone', 'US'), ('Arnold', 'Schwarzeneger', 'AT')]
+    director = Person('Steven', 'Spielberg', 'US')
+    genres = [Genre('SciFy'), Genre('Family')]
+    film = Film(title='et', rel_year=1983, actors=actors, genres=genres, director=director)
+    imdb_manager.addFilm(film)
+
 
