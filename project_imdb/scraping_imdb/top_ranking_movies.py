@@ -61,7 +61,20 @@ for movie_href in movie_hrefs:
                 genre = Genre(a.text.strip())
                 genres.append(genre)
 
-    film = Film(title=title, rel_year=year, actors=actors, genres=genres, director=director)
+    # rating
+    rating = float(film_detail_soup.find('span', {'itemprop': 'ratingValue'}).text)
+
+    film = Film(title=title,
+                orig_title=title,
+                rel_year=year,
+                duration=100,
+                rating=rating,
+                voters=10,
+                ranking=1,
+                actors=actors,
+                genres=genres,
+                director=director)
+    print(title)
     imdb_manager.addFilm(film)
     if counter > 10:
         break
