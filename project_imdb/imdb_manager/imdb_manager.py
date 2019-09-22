@@ -99,6 +99,7 @@ class ImdbManager:
         # if not add row
         pass
 
+
     def _addFilmRow(self, film):
         """
         add row with title, rel_year, durarion, rating, voters, ranking,
