@@ -18,8 +18,8 @@ SELECT ID FROM genre where genreName = '%s';
 #         orig_title
 
 add_film_row_query = """
-INSERT INTO film (title, relYear, durationMins, rating, voters, ranking) VALUES
-('%s', '%s', '%s', '%s', '%s', '%s');
+INSERT INTO film (title, relYear, durationMins, rating, voters, ranking, directorID) VALUES
+('%s', %s, %s, %s, %s, %s, %s);
 """
 
 add_actor_in_film_row = """

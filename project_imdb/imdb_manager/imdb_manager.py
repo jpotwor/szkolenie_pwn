@@ -108,20 +108,34 @@ class ImdbManager:
         :return:
         """
 
+        actor_ids = []
         for actor in film.actors:
             actor_id = self._getPersonId(actor, 'actor')
             if actor_id is None:
                 actor_id = self.addActor(actor)
+            actor_ids.append(actor_id)
 
+        genre_ids = []
         for genre in film.genres:
             genre_id = self._getGenreId(genre)
             if genre_id is None:
                 genre_id = self.addGenre(genre)
+            genre_ids.append(genre_id)
 
+        if film.director is not None:
+            director_id = self._getPersonId(film.director, 'director')
+            if director_id is None:
+                director_id = self.addDirector(film.director)
 
+        film_id = self._addFilmRow(film, director_id)
 
+        for actor_id in actor_ids:
+            self._addActorInFilmRow(film_id, actor_id)
 
-    def _addFilmRow(self, film):
+        for genre_id in genre_ids:
+            self._addFilmHasGenreRow(film_id, genre_id)
+
+    def _addFilmRow(self, film, director_id):
         """
         add row with title, rel_year, durarion, rating, voters, ranking,
         orig_title
@@ -129,8 +143,9 @@ class ImdbManager:
         :return:
         """
         cursor = self.conn.cursor()
-        cursor.execute(add_film_row_query % (film.title, film.rel_year, film.duration, film.rating, film.voters, film.ranking))
+        cursor.execute(add_film_row_query % (film.title, film.rel_year, film.duration, film.rating, film.voters, film.ranking, director_id))
         self.conn.commit()
+        return cursor.lastrowid
 
     def _addActorInFilmRow(self, film_id, actor_id):
         """
@@ -170,10 +185,10 @@ if __name__ == "__main__":
     # VALUES
     # ('et', '83', '200', '9.9', '200000', '2');
 
-    # et_film = Film(title='et', rel_year='83', duration=200, rating=9.9, ranking=2)
-    # imdb_manager._addFilmRow(et_film)
+    et_film = Film(title='et', rel_year='83', duration=200, rating=9.9, ranking=2)
+    print(imdb_manager._addFilmRow(et_film))
 
-    imdb_manager._addFilmHasGenreRow(3, 2)
-    person = Person('Jan', 'P', 'PL')
-    print(imdb_manager._getPersonId(person, 'actor'))
+    # imdb_manager._addFilmHasGenreRow(3, 2)
+    # person = Person('Jan', 'P', 'PL')
+    # print(imdb_manager._getPersonId(person, 'actor'))
 
