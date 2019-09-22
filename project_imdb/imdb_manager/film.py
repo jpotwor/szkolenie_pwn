@@ -5,6 +5,13 @@ def zero_if_none(val):
         return val
 
 
+def empty_list_if_none(val):
+    if val is None:
+        return []
+    else:
+        return val
+
+
 class Film:
     """
     Holds information about one film
@@ -45,12 +52,12 @@ class Film:
 
         self.duration = zero_if_none(duration)
         self.director = director
-        self.actors = actors
+        self.actors = empty_list_if_none(actors)
         self.rating = rating
         self.voters = zero_if_none(voters)
         self.ranking = zero_if_none(ranking)
         self.orig_title = orig_title
-        self.genres = genres
+        self.genres = empty_list_if_none(genres)
 
 
 if __name__ == "__main__":

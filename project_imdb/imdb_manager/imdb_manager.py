@@ -71,7 +71,11 @@ class ImdbManager:
         """
         cursor = self.conn.cursor()
         cursor.execute(get_person_id_query % (table, person.first_name, person.last_name))
-        return cursor.fetchall()[0][0]
+        try:
+            return cursor.fetchall()[0][0]
+        except IndexError:
+            return None
+
 
     def addGenre(self, genre):
         """
@@ -92,12 +96,29 @@ class ImdbManager:
         """
         cursor = self.conn.cursor()
         cursor.execute(get_genre_id_query % genre.name)
-        return cursor.fetchall()[0][0]
+        try:
+            return cursor.fetchall()[0][0]
+        except IndexError:
+            return None
 
     def addFilm(self, film):
-        # check if film exists in table
-        # if not add row
-        pass
+        """
+        adds film to database including transition tables values
+        :param film: Film object
+        :return:
+        """
+
+        for actor in film.actors:
+            actor_id = self._getPersonId(actor, 'actor')
+            if actor_id is None:
+                actor_id = self.addActor(actor)
+
+        for genre in film.genres:
+            genre_id = self._getGenreId(genre)
+            if genre_id is None:
+                genre_id = self.addGenre(genre)
+
+
 
 
     def _addFilmRow(self, film):
@@ -111,7 +132,7 @@ class ImdbManager:
         cursor.execute(add_film_row_query % (film.title, film.rel_year, film.duration, film.rating, film.voters, film.ranking))
         self.conn.commit()
 
-    def _addActorInFilm(self, film_id, actor_id):
+    def _addActorInFilmRow(self, film_id, actor_id):
         """
         adds row in actor_in_film table
         :param film_id: film_id
@@ -122,7 +143,7 @@ class ImdbManager:
         cursor.execute(add_actor_in_film_row % (film_id, actor_id))
         self.conn.commit()
 
-    def _addFilmHasGenre(self, film_id, genre_id):
+    def _addFilmHasGenreRow(self, film_id, genre_id):
         """
         adds row in film_has_genre table
         :param film_id: film_id
@@ -152,5 +173,7 @@ if __name__ == "__main__":
     # et_film = Film(title='et', rel_year='83', duration=200, rating=9.9, ranking=2)
     # imdb_manager._addFilmRow(et_film)
 
-    imdb_manager._addFilmHasGenre(3, 2)
+    imdb_manager._addFilmHasGenreRow(3, 2)
+    person = Person('Jan', 'P', 'PL')
+    print(imdb_manager._getPersonId(person, 'actor'))
 
