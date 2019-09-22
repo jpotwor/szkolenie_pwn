@@ -18,8 +18,9 @@ for movie_td in movie_tds:
     movie_href = movie_td.find('a').attrs['href']
     movie_hrefs.append(imdb_base_url + movie_href)
 
-
+counter = 0
 for movie_href in movie_hrefs:
+    counter += 1
     film_detail_content = urllib.request.urlopen(movie_href).read()
     film_detail_soup = bs.BeautifulSoup(film_detail_content, 'lxml')
 
@@ -60,7 +61,11 @@ for movie_href in movie_hrefs:
                 genre = Genre(a.text.strip())
                 genres.append(genre)
 
-    print("title: '%s'; genres: %s" % (title, ', '.join([el.name for el in genres])))
+    film = Film(title=title, rel_year=year, actors=actors, genres=genres, director=director)
+    imdb_manager.addFilm(film)
+    if counter > 10:
+        break
+
 
 
 
