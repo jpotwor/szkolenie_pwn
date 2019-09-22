@@ -21,9 +21,41 @@ for movie_td in movie_tds:
 
 for movie_href in movie_hrefs:
     film_detail_content = urllib.request.urlopen(movie_href).read()
-    film_detail_content_soup = bs.BeautifulSoup(film_detail_content, 'lxml')
-    title_wrapper_div = film_detail_content_soup.find('div', {'class': 'title_wrapper'})
-    print('*')
+    film_detail_soup = bs.BeautifulSoup(film_detail_content, 'lxml')
+
+    # tile, year
+    title_wrapper_div = film_detail_soup.find('div', {'class': 'title_wrapper'})
+    year = title_wrapper_div.find('h1').find('span').find('a').text
+    title = title_wrapper_div.find('h1').text
+    title = title.replace('(%s)' % year, '').strip()
+
+
+    credit_summary_items = film_detail_soup.findAll('div', {'class': 'credit_summary_item'})
+    for credit_summary_item in credit_summary_items:
+        # director
+        if 'Director' in credit_summary_item.find('h4').text:
+            director = credit_summary_item.find('a').text
+            director_split = director.split(' ')
+            first_name = director_split[0]
+            last_name = director_split[-1]
+            director = Person(first_name, last_name)
+
+        # actors
+        actors = []
+        if 'Stars' in credit_summary_item.find('h4').text:
+            for a in credit_summary_item.findAll('a'):
+                if not 'full cast' in a.text:
+                    a_split = a.text.split(' ')
+                    first_name = a_split[0]
+                    last_name = a_split[-1]
+                    actor = Person(first_name, last_name)
+                    actors.append(actor)
+
+    print("title: '%s'; year: '%s; director: %s'; actors: %s" % (title, year, director, actors))
+
+
+
+
 
 
 
